@@ -31,9 +31,25 @@ onBeforeInit: |
   jps.settings.fields.values[version] = version;
   jps.settings.fields["default"] = version;
   return {result: 0, settings: jps.settings};
+  
+onBeforeInstall: |
+  function log(text) {
+    return jelastic.marketplace.console.WriteLog(text);
+  }
+  var nodes = jps.env.topology.nodes;
+  
+  for (var i = 0, n = nodes.length; i < n; i++) {
+    if (nodes[i].nodeType == "${globals.TOMCAT_9}") {
+      nodes[i].engine = /cyclos-4\.14.*/.test("${settings.version}") ? "${globals.ENGINE_11}" : "${globals.ENGINE_8}";
+    }
+  }
+  return {result: 0, nodes: nodes};
 
 globals:
   password: "${fn.password}"
+  TOMCAT_9: tomcat9
+  ENGINE_8: openjdk8
+  ENGINE_11: openjdk11
 
 env:
   topology:
