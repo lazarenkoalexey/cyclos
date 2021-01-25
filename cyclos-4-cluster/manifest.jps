@@ -33,9 +33,6 @@ onBeforeInit: |
   return {result: 0, settings: jps.settings};
   
 onBeforeInstall: |
-  function log(text) {
-    return jelastic.marketplace.console.WriteLog(text);
-  }
   var nodes = jps.env.topology.nodes;
   
   for (var i = 0, n = nodes.length; i < n; i++) {
